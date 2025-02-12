@@ -50,15 +50,14 @@
             <p class="text-2xl font-bold">RocketLuncur</p>
         </div>
         <div class="flex item-center px-10 justify-between  w-full">
-            <div class="flex items-center gap-3 "><a class="underline underline-offset-4">Berita</a><a
-                    href="/jadwal">Jadwal</a>
+            <div class="flex items-center gap-3 "><a href="/berita">Berita</a><a href="/jadwal">Jadwal</a>
             </div>
 
             <div class="flex gap-2">
+                <div class=" flex justify-center items-center">
+                    <ion-icon name="bookmark" size="large" className="bg-black"></ion-icon>
+                </div>
                 @auth
-                <a href="/bookmarks" class=" flex justify-center items-center">
-                    <ion-icon name="bookmark-outline" size="large" className="bg-black"></ion-icon>
-                </a>
                 <div class="relative inline-block text-left">
                     <button onclick="toggleDropdown()"
                         class="flex items-center gap-2 px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 focus:outline-none">
@@ -93,49 +92,15 @@
     </div>
 
 
-    @if(!empty($news))
+    @if(!empty($bookmarkedNews))
     <div class="flex min-h-screen stars justify-center items-center">
 
-        <div class="p-6 ">
-            <!-- Berita Utama -->
-            <div class="  p-6 rounded-lg shadow-2xl mb-8 flex">
-                <div class="text-white flex flex-col justify-center items-center p-2">
 
-                    <div class="flex items-start flex-col">
-                        <h2 class="text-2xl font-bold mt-4">{{ $news[0]['title'] }}</h2>
-                        <p class="text-sm mt-1 text-start">{{ date('d M Y', strtotime($news[0]['published_at'])) }}</p>
-
-                    </div>
-                    <div class="flex gap-1 w-full  ">
-
-                        <button
-                            class=" block text-center bg-blue-600 text-white  p-2 rounded-lg hover:bg-blue-800 w-full h-full"
-                            onclick="openModal(
-                    '{{ $news[0]['image_url'] }}',
-                    '{{ addslashes($news[0]['title']) }}',
-                    '{{ $news[0]['published_at'] }}',
-                    {{ json_encode($news[0]['summary']) }},
-                    '{{ $news[0]['url'] }}'
-                    )">
-                            Baca
-                        </button>
-                        @auth
-                        <button data-berita-id="{{ $news[0]['id'] }}"
-                            class="bookmark-btn w-full bg-white rounded-lg hover:bg-gray-400">
-                            <ion-icon name="bookmark-outline" style="font-size: 35px; color:black">
-                            </ion-icon>
-                        </button>
-                        @endauth
-                    </div>
-                </div>
-                <img src="{{ $news[0]['image_url'] }}" alt="News Image" class="w-1/2 h-[500px] object-cover rounded-lg">
-            </div>
-        </div>
         @endif
         <div>
 
-            <div class=" gap-6 p-6   ">
-                @foreach($news as $index => $article)
+            <div class=" gap-6 p-6 grid grid-cols-3   ">
+                @foreach($bookmarkedNews as $index => $article)
                 @if($index > 0)
                 <div class="p-4 rounded-lg shadow-lg cursor-pointer flex gap-4">
                     <img src="{{ $article['image_url'] }}" alt="News Image" class=" w-40 object-cover rounded-lg">
@@ -157,13 +122,11 @@
                     )">
                                 Baca
                             </button>
-                            @auth
                             <button data-berita-id="{{ $article['id'] }}"
                                 class="bookmark-btn w-full bg-white rounded-lg hover:bg-gray-400">
                                 <ion-icon name="bookmark-outline" style="font-size: 35px; color:black">
                                 </ion-icon>
                             </button>
-                            @endauth
                         </div>
                     </div>
                 </div>
@@ -172,21 +135,7 @@
 
             </div>
 
-            <!-- Pagination Controls -->
-            <div class="flex justify-between items-center mt-6 px-10">
-                @if ($page > 1)
-                <a href="{{ url('berita?page=' . ($page - 1)) }}"
-                    class="bg-blue-600 px-4 py-2 rounded-lg text-white hover:bg-blue-800">
-                    ⬅ Previous
-                </a>
-                @endif
 
-                @if (($page * $perPage) < $totalNews) <a href="{{ url('berita?page=' . ($page + 1)) }}"
-                    class="bg-blue-600 px-4 py-2 rounded-lg text-white hover:bg-blue-800">
-                    Next ➡
-                    </a>
-                    @endif
-            </div>
         </div>
     </div>
 

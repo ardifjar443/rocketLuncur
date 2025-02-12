@@ -17,7 +17,7 @@ class DashboardController extends Controller
     public function news(Request $request)
     {
         $page = $request->query('page', 1);
-        $perPage = 6; // Jumlah berita per halaman
+        $perPage = 4; // Jumlah berita per halaman
         $offset = ($page - 1) * $perPage;
 
         // Panggil API berita roket
@@ -38,14 +38,14 @@ class DashboardController extends Controller
             // Menerjemahkan title
             $translatedTitleResponse = Http::get('https://ftapi.pythonanywhere.com/translate', [
                 'sl' => 'en',
-                'dl' => 'su',
+                'dl' => 'id',
                 'text' => $title
             ]);
 
             // Menerjemahkan summary
             $translatedSummaryResponse = Http::get('https://ftapi.pythonanywhere.com/translate', [
                 'sl' => 'en',
-                'dl' => 'su',
+                'dl' => 'id',
                 'text' => $summary
             ]);
 
@@ -74,6 +74,7 @@ class DashboardController extends Controller
         $launchData = $launchResponse->json();
         $launches = $launchData['results'] ?? [];
         $totalLaunches = $launchData['count'] ?? 0; // Total peluncuran untuk pagination
+
 
         return view('launches', compact('launches', 'page', 'perPage', 'totalLaunches'));
     }
